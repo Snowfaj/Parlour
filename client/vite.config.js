@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'https://porlour-booking.onrender.com',
+        target: 'https://parlour-booking.onrender.com',
         changeOrigin: true,
       },
     },
