@@ -19,7 +19,10 @@ const PORT = process.env.PORT || 5000;
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || "https://parlour-booking.onrender.com",
+  origin: [
+    "http://localhost:5173",
+    "https://parlour-booking-delta.vercel.app"
+  ],
   credentials: true,
 }));
 app.use(express.json());
