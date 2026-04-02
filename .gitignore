@@ -1,0 +1,24 @@
+# Logs
+node_modules/
+npm-debug.log*
+
+# Environment variables
+.env
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Prisma generated
+server/node_modules/
+client/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
