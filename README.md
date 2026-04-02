@@ -197,3 +197,4 @@ npm run build
 | Password | `Admin@123` |
 
 > ⚠️ **Change before production!** Use `npm run seed` then update the admin password via database.
+# parlour-booking
