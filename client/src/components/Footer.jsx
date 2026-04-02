@@ -70,6 +70,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <p>© 2025 Glamour Parlour. All rights reserved.</p>
           <div className="flex gap-4">
+            <Link to="/admin/login" className="hover:text-primary-400 transition-colors">Staff Login 🔐</Link>
             <a href="#" className="hover:text-primary-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary-400 transition-colors">Terms of Service</a>
           </div>
