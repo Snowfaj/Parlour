@@ -69,7 +69,10 @@ export default function AdminDashboardPage() {
       await api.patch(`/bookings/${id}/status`, { status })
       toast.success(`Booking ${status.toLowerCase()}!`)
       fetchData()
-    } catch { toast.error('Failed to update booking.') }
+    } catch (err) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to update booking.'
+      toast.error(msg)
+    }
   }
 
   const setAppointment = async () => {
@@ -204,7 +207,7 @@ export default function AdminDashboardPage() {
                           <span className={`badge ${PAYMENT_COLORS[b.paymentStatus] || 'badge-unpaid'}`}>{b.paymentStatus}</span>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-gray-500">
-                          <span>📞 {b.clientPhone}</span>
+                          <span>📞 <a href={`tel:${b.clientPhone}`} className="text-primary-700 hover:underline">{b.clientPhone}</a></span>
                           <span>✉️ {b.clientEmail}</span>
                           <span>💆 {b.service?.name}</span>
                           <span>💰 ₹{b.totalAmount}</span>
@@ -268,7 +271,13 @@ export default function AdminDashboardPage() {
                       <h3 className="font-semibold text-dark-100">{c.name}</h3>
                       {!c.isRead && <span className="badge badge-pending text-xs">Unread</span>}
                     </div>
-                    <p className="text-xs text-gray-400 mb-2">{c.email}{c.phone ? ` · ${c.phone}` : ''} · {new Date(c.createdAt).toLocaleDateString('en-IN')}</p>
+                    <p className="text-xs text-gray-400 mb-2">
+                      {c.email}
+                      {c.phone && (
+                        <> · <a href={`tel:${c.phone}`} className="text-primary-700 hover:underline">{c.phone}</a></>
+                      )}
+                      · {new Date(c.createdAt).toLocaleDateString('en-IN')}
+                    </p>
                     <p className="text-sm font-semibold text-gray-700 mb-1">📌 {c.subject}</p>
                     <p className="text-sm text-gray-600 leading-relaxed">{c.message}</p>
                   </div>

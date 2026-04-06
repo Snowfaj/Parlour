@@ -52,13 +52,13 @@ export default function Footer() {
             <h4 className="font-semibold text-white mb-4">Contact Us</h4>
             <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-start gap-2">
-                📍 <span>123 Glamour Street,<br />Chennai, Tamil Nadu 600001</span>
+                📍 <span>123 Glamour Street,<br />Thoothukudi, Tamil Nadu 600001</span>
               </li>
               <li className="flex items-center gap-2">
-                📞 <a href="tel:+919876543210" className="hover:text-primary-400 transition-colors">+91 98765 43210</a>
+                📞 <a href="tel:+919025605056" className="hover:text-primary-400 transition-colors">+91 90256 05056</a>
               </li>
               <li className="flex items-center gap-2">
-                ✉️ <a href="mailto:hello@glamour.com" className="hover:text-primary-400 transition-colors">hello@glamour.com</a>
+                ✉️ <a href="mailto:snowfatuty03@gmail.com" className="hover:text-primary-400 transition-colors">snowfatuty03@gmail.com</a>
               </li>
               <li className="flex items-center gap-2">
                 🕐 <span>Mon–Sat: 9 AM – 8 PM</span>
@@ -70,7 +70,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <p>© 2025 Glamour Parlour. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link to="/admin/login" className="hover:text-primary-400 transition-colors">Staff Login 🔐</Link>
+            <Link to="/admin/login" className="hover:text-primary-400 transition-colors"> Login 🔐</Link>
             <a href="#" className="hover:text-primary-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary-400 transition-colors">Terms of Service</a>
           </div>

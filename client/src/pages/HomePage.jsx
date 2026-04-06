@@ -11,12 +11,12 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import api from '../api/axios'
 
 const galleryImages = [
-  { emoji: '💆‍♀️', label: 'Spa Treatment',    bg: 'from-purple-400 to-pink-400' },
-  { emoji: '💇‍♀️', label: 'Hair Styling',      bg: 'from-pink-400 to-rose-400' },
-  { emoji: '👰',   label: 'Bridal Package',   bg: 'from-rose-400 to-amber-400' },
-  { emoji: '💅',   label: 'Nail Art',          bg: 'from-fuchsia-400 to-purple-400' },
-  { emoji: '✨',   label: 'Facial Treatment',  bg: 'from-teal-400 to-cyan-400' },
-  { emoji: '💄',   label: 'Makeup Studio',     bg: 'from-amber-400 to-orange-400' },
+  { src: 'https://images.unsplash.com/photo-1717160675489-7779f2c91999?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGFpciUyMHRyZWF0bWVudHxlbnwwfHwwfHx8MA%3D%3D', label: 'Hair Spa Treatment', alt: 'Hair spa treatment' },
+  { src: 'https://images.unsplash.com/photo-1662561283890-b00a2d5b4bfc?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGJyaWRhbCUyMG1ha2V1cHxlbnwwfHwwfHx8MA%3D%3D', label: 'Bridal Makeup',      alt: 'Bridal makeup look' },
+  { src: 'https://plus.unsplash.com/premium_photo-1661326352695-6cbe1ff74ee9?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnJpZGFsJTIwbWFrZXVwfGVufDB8fDB8fHww', label: 'Engagement Makeup', alt: 'Engagement makeup look' },
+  { src: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZmFjaWFsfGVufDB8fDB8fHww', label: 'Facial', alt: 'Facial treatment' },
+  { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqCPK6HnVb4r6tKkRMS6z27zCR72q86qw3Sw&s', label: 'Nail Art',          alt: 'Nail art' },
+  { src: 'https://images.unsplash.com/photo-1709477542149-f4e0e21d590b?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFrZXVwJTIwYXJ0aXN0fGVufDB8fDB8fHww', label: 'Glam Makeup', alt: 'Glamorous makeup closeup' },
 ]
 
 const stats = [
@@ -168,10 +168,19 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 whileHover={{ scale: 1.03 }}
-                className={`relative rounded-2xl overflow-hidden aspect-square bg-gradient-to-br ${img.bg} flex flex-col items-center justify-center gap-3 cursor-pointer shadow-card`}
+                className={`relative rounded-2xl overflow-hidden aspect-square ${img.src ? 'bg-gray-100' : `bg-gradient-to-br ${img.bg}`} cursor-pointer shadow-card`}
               >
-                <span className="text-7xl drop-shadow-lg">{img.emoji}</span>
-                <span className="text-white font-semibold text-sm bg-black/20 px-3 py-1 rounded-full">{img.label}</span>
+                {img.src ? (
+                  <>
+                    <img src={img.src} alt={img.alt || img.label} className="object-cover w-full h-full" />
+                    <span className="absolute left-3 bottom-3 text-white font-semibold text-sm bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">{img.label}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-7xl drop-shadow-lg">{img.emoji}</span>
+                    <span className="text-white font-semibold text-sm bg-black/20 px-3 py-1 rounded-full">{img.label}</span>
+                  </>
+                )}
               </motion.div>
             ))}
           </div>

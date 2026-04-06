@@ -9,9 +9,9 @@ import Footer from '../components/Footer'
 import api from '../api/axios'
 
 const contactInfo = [
-  { icon: '📍', title: 'Address',       text: '123 Glamour Street, Chennai, Tamil Nadu 600001' },
-  { icon: '📞', title: 'Phone',         text: '+91 98765 43210' },
-  { icon: '✉️', title: 'Email',         text: 'hello@glamour.com' },
+  { icon: '📍', title: 'Address',       text: '123 Glamour Street, Thoothukudi, Tamil Nadu 600001' },
+  { icon: '📞', title: 'Phone',         text: '+91 90256 05056' },
+  { icon: '✉️', title: 'Email',         text: 'snowfatuty03@gmail.com' },
   { icon: '🕐', title: 'Working Hours', text: 'Mon–Sat: 9 AM – 8 PM\nSunday: 10 AM – 6 PM' },
 ]
 
@@ -74,19 +74,30 @@ export default function ContactPage() {
                     <span className="text-3xl">{item.icon}</span>
                     <div>
                       <p className="font-semibold text-dark-100 text-sm mb-1">{item.title}</p>
-                      <p className="text-gray-500 text-sm whitespace-pre-line">{item.text}</p>
+                      <p className="text-gray-500 text-sm whitespace-pre-line">
+                        {item.title === 'Phone' ? (
+                          <a href={`tel:${item.text}`} className="text-primary-700 hover:underline">{item.text}</a>
+                        ) : (
+                          item.text
+                        )}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Map placeholder */}
-              <div className="rounded-2xl bg-gradient-to-br from-primary-100 to-rose-100 h-48 flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-5xl mb-2">📍</p>
-                  <p className="text-primary-700 font-semibold text-sm">Glamour Parlour, Chennai</p>
-                  <p className="text-gray-500 text-xs">Find us on Google Maps</p>
-                </div>
+              {/* Google Map (Thoothukudi, Tamil Nadu) */}
+              <div className="rounded-2xl overflow-hidden h-48 shadow-sm">
+                <iframe
+                  title="Glamour Parlour — Thoothukudi"
+                  src="https://www.google.com/maps?q=Thoothukudi,+Tamil+Nadu,+India&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </div>
 
@@ -121,7 +132,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-                      <input type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-field" />
+                      <input type="tel" placeholder="+91 90256 05056" value={form.phone} onChange={e => update('phone', e.target.value)} className="input-field" />
                     </div>
                   </div>
                   <div>
