@@ -7,12 +7,34 @@ const nodemailer = require("nodemailer");
 
 // ─── Transporter Setup ─────────────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // use TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
+
+// Verify transporter configuration on startup
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("❌ Mail transporter verify failed:", err);
+  } else {
+    console.log("✅ Mail transporter is ready");
+  }
+});
+
+// Helper: safe sendMail wrapper with logging
+const sendMailSafe = async (mailOptions) => {
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent successfully to", mailOptions.to);
+  } catch (error) {
+    console.error("❌ Email error:", error);
+    throw error;
+  }
+};
 
 // ─── Helper: Format Date ───────────────────────────────────────────────────────
 const formatDate = (date) => {
@@ -76,7 +98,7 @@ const sendBookingConfirmationToClient = async (booking) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  await sendMailSafe(mailOptions);
   console.log(`📧 Booking confirmation sent to ${booking.clientEmail}`);
 };
 
@@ -114,7 +136,7 @@ const sendNewBookingNotificationToAdmin = async (booking) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  await sendMailSafe(mailOptions);
   console.log(`📧 New booking notification sent to admin`);
 };
 
@@ -162,7 +184,7 @@ const sendAppointmentConfirmationToClient = async (booking) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  await sendMailSafe(mailOptions);
   console.log(`📧 Appointment ${booking.status.toLowerCase()} email sent to ${booking.clientEmail}`);
 };
 
@@ -194,7 +216,7 @@ const sendContactNotificationToAdmin = async (contact) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  await sendMailSafe(mailOptions);
   console.log(`📧 Contact notification sent to admin`);
 };
 
