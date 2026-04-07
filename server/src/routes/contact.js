@@ -9,7 +9,6 @@ const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const authMiddleware = require("../middleware/auth");
-const { sendContactNotificationToAdmin } = require("../utils/email");
 
 const prisma = new PrismaClient();
 
@@ -25,9 +24,6 @@ router.post("/", async (req, res) => {
     const contact = await prisma.contactMessage.create({
       data: { name, email, phone, subject, message },
     });
-
-    // Notify admin asynchronously
-    sendContactNotificationToAdmin(contact).catch(console.error);
 
     res.status(201).json({
       success: true,

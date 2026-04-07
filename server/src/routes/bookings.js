@@ -11,7 +11,6 @@ const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const authMiddleware = require("../middleware/auth");
-const { sendBookingConfirmationToClient, sendNewBookingNotificationToAdmin, sendAppointmentConfirmationToClient } = require("../utils/email");
 
 const prisma = new PrismaClient();
 
@@ -49,10 +48,6 @@ router.post("/", async (req, res) => {
       },
       include: { service: true },
     });
-
-    // Send emails asynchronously (don't block response)
-    sendBookingConfirmationToClient(booking).catch(console.error);
-    sendNewBookingNotificationToAdmin(booking).catch(console.error);
 
     res.status(201).json({ success: true, message: "Booking created successfully.", booking });
   } catch (error) {
@@ -113,11 +108,6 @@ router.patch("/:id/status", authMiddleware, async (req, res) => {
       include: { service: true },
     });
 
-    // Notify client on confirmation
-    if (status === "CONFIRMED") {
-      sendAppointmentConfirmationToClient(booking).catch(console.error);
-    }
-
     res.json({ success: true, message: `Booking ${status.toLowerCase()}.`, booking });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to update booking status." });
@@ -142,7 +132,6 @@ router.patch("/:id/appointment", authMiddleware, async (req, res) => {
       include: { service: true },
     });
 
-    sendAppointmentConfirmationToClient(booking).catch(console.error);
     res.json({ success: true, message: "Appointment time set and client notified.", booking });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to set appointment time." });

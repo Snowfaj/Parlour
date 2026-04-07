@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
+import emailjs from '@emailjs/browser'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import api from '../api/axios'
@@ -108,6 +109,47 @@ export default function BookingPage() {
             setBooking(bookingRes.data.booking)
             setSuccess(true)
             toast.success('Booking confirmed! Check your email 📧')
+
+            // Send emails via EmailJS
+            const booking = bookingRes.data.booking
+            const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', {
+              weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            })
+
+            // Booking confirmation to client
+            emailjs.send(
+              "service_uld4bcu",
+              "template_0tjau5g",
+              {
+                to_email: booking.clientEmail,
+                client_name: booking.clientName,
+                service_name: booking.service.name,
+                preferred_date: formatDate(booking.preferredDate),
+                preferred_time: booking.preferredTime,
+                total_amount: booking.totalAmount,
+                payment_id: booking.paymentId || "N/A",
+              },
+              "sALVrwmFkr67OmV75"
+            ).catch(console.error)
+
+            // Notification to admin
+            emailjs.send(
+              "service_uld4bcu",
+              "NEW_BOOKING_ADMIN_TEMPLATE",
+              {
+                to_email: "snowfaj4@gmail.com", // Replace with actual admin email
+                client_name: booking.clientName,
+                client_email: booking.clientEmail,
+                client_phone: booking.clientPhone,
+                service_name: booking.service.name,
+                service_category: booking.service.category,
+                preferred_date: formatDate(booking.preferredDate),
+                preferred_time: booking.preferredTime,
+                total_amount: booking.totalAmount,
+                payment_status: booking.paymentStatus,
+              },
+              "sALVrwmFkr67OmV75"
+            ).catch(console.error)
           } catch (err) {
             toast.error('Payment verified but booking failed. Contact support.')
           } finally {

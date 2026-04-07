@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
+import emailjs from '@emailjs/browser'
 import { useAuth } from '../../context/AuthContext'
 import api from '../../api/axios'
 
@@ -66,9 +67,30 @@ export default function AdminDashboardPage() {
 
   const updateStatus = async (id, status) => {
     try {
-      await api.patch(`/bookings/${id}/status`, { status })
+      const res = await api.patch(`/bookings/${id}/status`, { status })
       toast.success(`Booking ${status.toLowerCase()}!`)
       fetchData()
+
+      // Send confirmation email to client
+      const booking = res.data.booking
+      const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      })
+
+      emailjs.send(
+        "YOUR_SERVICE_ID",
+        "APPOINTMENT_CONFIRMATION_TEMPLATE",
+        {
+          to_email: booking.clientEmail,
+          client_name: booking.clientName,
+          service_name: booking.service.name,
+          status: booking.status,
+          appointment_date: booking.appointmentDate ? formatDate(booking.appointmentDate) : formatDate(booking.preferredDate),
+          appointment_time: booking.appointmentTime || booking.preferredTime,
+          is_confirmed: booking.status === "CONFIRMED",
+        },
+        "YOUR_PUBLIC_KEY"
+      ).catch(console.error)
     } catch (err) {
       const msg = err?.response?.data?.message || err?.message || 'Failed to update booking.'
       toast.error(msg)
@@ -79,13 +101,34 @@ export default function AdminDashboardPage() {
     if (!apptDate || !apptTime) { toast.error('Select date and time.'); return }
     setApptLoading(true)
     try {
-      await api.patch(`/bookings/${apptModal.id}/appointment`, {
+      const res = await api.patch(`/bookings/${apptModal.id}/appointment`, {
         appointmentDate: apptDate,
         appointmentTime: apptTime,
       })
       toast.success('Appointment set & client notified! 📧')
       setApptModal(null)
       fetchData()
+
+      // Send confirmation email to client
+      const booking = res.data.booking
+      const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      })
+
+      emailjs.send(
+        "YOUR_SERVICE_ID",
+        "APPOINTMENT_CONFIRMATION_TEMPLATE",
+        {
+          to_email: booking.clientEmail,
+          client_name: booking.clientName,
+          service_name: booking.service.name,
+          status: booking.status,
+          appointment_date: formatDate(booking.appointmentDate),
+          appointment_time: booking.appointmentTime,
+          is_confirmed: true,
+        },
+        "YOUR_PUBLIC_KEY"
+      ).catch(console.error)
     } catch { toast.error('Failed to set appointment.') }
     finally { setApptLoading(false) }
   }

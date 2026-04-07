@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import emailjs from '@emailjs/browser'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import api from '../api/axios'
@@ -30,9 +31,24 @@ export default function ContactPage() {
     }
     setLoading(true)
     try {
-      await api.post('/contact', form)
+      const res = await api.post('/contact', form)
       setSent(true)
       toast.success('Message sent! We\'ll get back to you soon 💌')
+
+      // Send notification to admin via EmailJS
+      emailjs.send(
+        "YOUR_SERVICE_ID",
+        "CONTACT_ADMIN_TEMPLATE",
+        {
+          to_email: "admin@example.com", // Replace with actual admin email
+          name: form.name,
+          email: form.email,
+          phone: form.phone || "",
+          subject: form.subject,
+          message: form.message,
+        },
+        "YOUR_PUBLIC_KEY"
+      ).catch(console.error)
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to send message.')
     } finally {
