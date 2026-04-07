@@ -71,26 +71,26 @@ export default function AdminDashboardPage() {
       toast.success(`Booking ${status.toLowerCase()}!`)
       fetchData()
 
-      // Send confirmation email to client
-      const booking = res.data.booking
-      const formatDate = (date) => new Date(date).toLocaleDateString('en-IN', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      })
+      if (status === 'CONFIRMED') {
+        const booking = res.data.booking
 
-      emailjs.send(
-        "YOUR_SERVICE_ID",
-        "APPOINTMENT_CONFIRMATION_TEMPLATE",
-        {
-          to_email: booking.clientEmail,
-          client_name: booking.clientName,
-          service_name: booking.service.name,
-          status: booking.status,
-          appointment_date: booking.appointmentDate ? formatDate(booking.appointmentDate) : formatDate(booking.preferredDate),
-          appointment_time: booking.appointmentTime || booking.preferredTime,
-          is_confirmed: booking.status === "CONFIRMED",
-        },
-        "YOUR_PUBLIC_KEY"
-      ).catch(console.error)
+        emailjs.send(
+          "service_uld4bcu",
+          "template_1j23j4y",
+          {
+            to_email: booking.clientEmail,
+            client_name: booking.clientName,
+            service_name: booking.service.name,
+            preferred_date: new Date(booking.preferredDate).toLocaleDateString(),
+            preferred_time: booking.preferredTime,
+          },
+          "sALVrwmFkr67OmV75"
+        ).then(() => {
+          console.log("✅ Confirmation mail sent")
+        }).catch(err => {
+          console.error("❌ Email error:", err)
+        })
+      }
     } catch (err) {
       const msg = err?.response?.data?.message || err?.message || 'Failed to update booking.'
       toast.error(msg)
@@ -116,8 +116,8 @@ export default function AdminDashboardPage() {
       })
 
       emailjs.send(
-        "YOUR_SERVICE_ID",
-        "APPOINTMENT_CONFIRMATION_TEMPLATE",
+        "service_uld4bcu",
+        "template_1j23j4y",
         {
           to_email: booking.clientEmail,
           client_name: booking.clientName,
@@ -127,7 +127,7 @@ export default function AdminDashboardPage() {
           appointment_time: booking.appointmentTime,
           is_confirmed: true,
         },
-        "YOUR_PUBLIC_KEY"
+        "sALVrwmFkr67OmV75"
       ).catch(console.error)
     } catch { toast.error('Failed to set appointment.') }
     finally { setApptLoading(false) }
